@@ -3,10 +3,12 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from database.models import Base
 from database.customer_dal import CustomerDAL
+from database.purchase_dal import PurchaseDAL
 from api import rest_controller
 from database.seeder import DatabaseSeeder
 import os
 from configparser import ConfigParser
+from kafka_consumer.consumer import KafkaPurchaseConsumer
 
 
 app = Flask(__name__)
@@ -26,6 +28,15 @@ if os.environ.get('FLASK_ENV') == 'development':
 seeder = DatabaseSeeder(session=session)
 seeder.run()
 
-rest_controller.RestController(app=app, session=session)
+purchase_dal=PurchaseDAL(session=session)
+customer_dal=CustomerDAL(session=session)
+
+rest_controller.RestController(app=app, session=session, customer_dal=customer_dal)
+
+consumer = KafkaPurchaseConsumer(purchase_dal=purchase_dal, topic="purchases", bootstrap_servers="localhost:9092")
+consumer.start()
+
+
+
 
 

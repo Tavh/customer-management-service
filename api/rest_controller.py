@@ -4,9 +4,9 @@ from database.customer_dal import CustomerDAL
 
 
 class RestController:
-    def __init__(self, app: Flask, session: Session):
+    def __init__(self, app: Flask, session: Session, customer_dal: CustomerDAL):
         self.app = app
-        self.customer_dal = CustomerDAL(session=session)
+        self.customer_dal = customer_dal
 
         self.register_endpoints()
 
