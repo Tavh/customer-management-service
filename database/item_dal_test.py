@@ -33,17 +33,3 @@ class TestItemDAL(TestCase):
         retrieved_item = self.item_dal.get_item_by_id(item_id=item.id)
         self.assertEqual(retrieved_item, item)
 
-    def test_get_all_items(self):
-        # Test that all items can be retrieved
-        item_data = [
-            {'name': 'Widget', 'price': 9.99},
-            {'name': 'Gizmo', 'price': 19.99},
-            {'name': 'Doodad', 'price': 4.99},
-        ]
-        items = []
-        for data in item_data:
-            item = self.item_dal.create_item(name=data['name'], price=data['price'])
-            items.append(item)
-        retrieved_items = self.item_dal.get_all_items()
-        self.assertEqual(len(retrieved_items), len(item_data))
-        self.assertCountEqual([i.id for i in retrieved_items], [i.id for i in items])

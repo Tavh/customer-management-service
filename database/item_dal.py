@@ -15,6 +15,3 @@ class ItemDAL:
     def get_item_by_id(self, item_id: int) -> Optional[Item]:
         return self.session.query(Item).filter_by(id=item_id).first()
 
-    def get_all_items(self) -> List[Item]:
-        return self.session.query(Item).all()
-

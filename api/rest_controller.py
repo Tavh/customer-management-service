@@ -13,6 +13,6 @@ class RestController:
     def register_endpoints(self):
         self.app.route('/customers/<customer_id>/purchases', methods=['GET'])(self.get_customer_purchases)
 
-    def get_customer_purchases(self, customer_id, item_id):
+    def get_customer_purchases(self, customer_id):
         purchases = self.customer_dal.get_customer_purchases(customer_id=customer_id)
         return jsonify([p.to_json() for p in purchases])
