@@ -13,7 +13,7 @@ To get started with the Customer Management Service, follow these steps:
 
 ## Configuration
 
-The Customer Management Service uses a configuration file to specify the connection details for the PostgreSQL database. The configuration file should be named `config.yml` and located in the root directory of the app. Here's an example configuration file:
+The Customer Management Service uses a configuration file to specify the connection details for the PostgreSQL database. The configuration file should be named `config.ini` and located in the root directory of the app. Here's an example configuration file:
 
 ## API Endpoints
 
