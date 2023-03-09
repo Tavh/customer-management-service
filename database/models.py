@@ -13,7 +13,7 @@ class Customer(Base):
     
     id = Column(Integer, primary_key=True)
     name = Column(String, nullable=False)
-    purchases = relationship('Purchase', back_populates='customer')
+
 
     def to_json(self):
         return jsonify({
@@ -30,6 +30,7 @@ class Item(Base):
     name = Column(String, nullable=False)
     price = Column(Float, nullable=False)
 
+
     def to_json(self):
         return jsonify({
             'id': self.id,
@@ -43,18 +44,25 @@ class Purchase(Base):
     id = Column(Integer, primary_key=True)
     purchase_time = Column(String, nullable=False, server_default=func.now())
     price_at_purchase_time = Column(Float, nullable=False)
-    
+
     customer_id = Column(Integer, ForeignKey('customers.id'), nullable=False)
-    customer = relationship('Customer', back_populates='purchases')
+    customer = relationship('Customer', backref='purchases')
     
     item_id = Column(Integer, ForeignKey('items.id'), nullable=False)
-    item = relationship('Item', backref=backref('purchases', lazy=True))
+    item = relationship('Item', backref='purchases')
 
     def to_json(self):
-        return jsonify({
+        return {
             'id': self.id,
             'purchase_time': self.purchase_time,
             'price_at_purchase_time': self.price_at_purchase_time,
-            'customer': self.customer.to_json(),
-            'item': self.item.to_json()
-        })
+            'customer': {
+                'id': self.customer.id,
+                'name': self.customer.name
+            },
+            'item': {
+                'id': self.item.id,
+                'name': self.item.name,
+                'price': self.item.price
+            }
+        }

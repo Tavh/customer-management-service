@@ -15,4 +15,5 @@ class RestController:
 
     def get_customer_purchases(self, customer_id):
         purchases = self.customer_dal.get_customer_purchases(customer_id=customer_id)
+        print(purchases)
         return jsonify([p.to_json() for p in purchases])
