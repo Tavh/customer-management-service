@@ -1,9 +1,9 @@
-from flask import Flask, jsonify, request
+from flask import Flask
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from database.models import Base
 from database.customer_dal import CustomerDAL
-from api import customer_controller
+from api import rest_controller
 from database.seeder import DatabaseSeeder
 import os
 from configparser import ConfigParser
@@ -26,8 +26,6 @@ if os.environ.get('FLASK_ENV') == 'development':
 seeder = DatabaseSeeder(session=session)
 seeder.run()
 
-customer_dal = CustomerDAL(session=session)
-
-customer_controller.CustomerController(app=app, session=session)
+rest_controller.RestController(app=app, session=session)
 
 

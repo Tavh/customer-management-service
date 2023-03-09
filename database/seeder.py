@@ -33,8 +33,7 @@ class DatabaseSeeder:
                 item = items[randint(0, len(items) - 1)]
                 self.purchase_dal.create_purchase(
                     customer_id=customer.id,
-                    item_id=item.id,
-                    price_at_purchase_time=item.price
+                    item_id=item.id
                 )
 
         self.session.commit()

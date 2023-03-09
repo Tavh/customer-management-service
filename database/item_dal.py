@@ -18,16 +18,3 @@ class ItemDAL:
     def get_all_items(self) -> List[Item]:
         return self.session.query(Item).all()
 
-    def update_item(self, item_id: int, name: str, price: float) -> Optional[Item]:
-        item = self.get_item_by_id(item_id=item_id)
-        if item:
-            item.name = name
-            item.price = price
-            self.session.commit()
-        return item
-
-    def remove_item(self, item_id: int):
-        item = self.get_item_by_id(item_id=item_id)
-        if item:
-            self.session.delete(item)
-            self.session.commit()
