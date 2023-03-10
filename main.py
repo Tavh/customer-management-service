@@ -9,9 +9,8 @@ from database.purchase_dal import PurchaseDAL
 from database.item_dal import ItemDAL
 from api import rest_controller
 from database.seeder import DatabaseSeeder
-
 from kafka_consumer.consumer import KafkaPurchaseConsumer
-
+from util.logger import get_logger
 
 app = Flask(__name__)
     
@@ -20,7 +19,9 @@ database_url = os.environ['DATABASE_URL']
 bootstrap_servers = os.environ['BOOTSTRAP_SERVERS']
 topic = os.environ['TOPIC']
 
-print(f"database_url: {database_url}, bootstrap_servers: {bootstrap_servers}, topic: {topic}")
+logger = get_logger(__name__)
+
+logger.info(f"Starting with config: database_url={database_url}, bootstrap_servers={bootstrap_servers}, topic={topic}")
 
 # Create SQLAlchemy session for interacting with the database
 engine = create_engine(database_url)
