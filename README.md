@@ -1,42 +1,30 @@
 # Customer Management Service
 
-An application for managing customers and the items they purchase
+An application for managing purchases made by customers.
 
 ## Getting Started
 
-To get started with the Customer Management Service, follow these steps:
+This module depends on an available PostgreSQL Server and Kafka Broker.
+To deploy them locally, reffer to https://github.com/Tavh/customer-platform
 
-1. Clone this repository to your local machine.
-2. Install the required dependencies by running `make install`.
-3. Create a PostgreSQL database and set the connection details in a configuration file (see below).
-4. Run the app by running `python main.py`.
+Once these conditions are met, follow these steps to run this application:
+
 
 ## Configuration
 
-The Customer Management Service uses a configuration file to specify the connection details for the PostgreSQL database. The configuration file should be named `config.ini` and located in the root directory of the app. Here's an example configuration file:
+The Purchase Management Service uses a configuration file to specify the connection details for the PostgreSQL database and
+the kafka bootstrap servers. The configuration file should be named `config.ini` and located in the root directory of the app. Here's an example configuration file:
+
+```ini
+[database]
+url = postgresql://username:password@localhost:5432/customers
+
+[kafka]
+bootstrap_servers = localhost:9092
+```
 
 ## API Endpoints
 
 The following API endpoints are available:
 
-### Customers
-
-- `GET /customers`: Returns a list of all customers.
-- `GET /customers/{customer_id}`: Returns the details of a single customer.
-- `POST /customers`: Creates a new customer.
-- `PUT /customers/{customer_id}`: Updates the details of a customer.
-- `DELETE /customers/{customer_id}`: Deletes a customer.
-
-### Items
-
-- `GET /items`: Returns a list of all items.
-- `GET /items/{item_id}`: Returns the details of a single item.
-- `POST /items`: Creates a new item.
-- `PUT /items/{item_id}`: Updates the details of an item.
-- `DELETE /items/{item_id}`: Deletes an item.
-
-### Purchases
-
-- `GET /purchases`: Returns a list of all purchases.
-- `GET /purchases/{purchase_id}`: Returns the details of a single purchase.
-- `POST /purchases`: Creates a new purchase.
+- `GET /customers/{customer_id}/purchases`: Returns a list of purchases made by the customer.

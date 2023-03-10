@@ -1,43 +1,53 @@
+import os
+
 from flask import Flask
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from database.models import Base
 from database.customer_dal import CustomerDAL
 from database.purchase_dal import PurchaseDAL
+from database.item_dal import ItemDAL
 from api import rest_controller
 from database.seeder import DatabaseSeeder
-import os
-from configparser import ConfigParser
+
 from kafka_consumer.consumer import KafkaPurchaseConsumer
 
 
 app = Flask(__name__)
+    
+# Get configuration from environment variables
+database_url = os.environ['DATABASE_URL']
+bootstrap_servers = os.environ['BOOTSTRAP_SERVERS']
+topic = os.environ['TOPIC']
 
-config = ConfigParser()
-config.read('config.ini')
-database_url = config['database']['url']
-bootstrap_servers = config['kafka']['bootstrap_servers']
+print(f"database_url: {database_url}, bootstrap_servers: {bootstrap_servers}, topic: {topic}")
 
+# Create SQLAlchemy session for interacting with the database
 engine = create_engine(database_url)
 Session = sessionmaker(bind=engine)
 session = Session()
 
-if os.environ.get('FLASK_ENV') == 'development':
+# Create DAL instances to be propagated to their dependant components
+customer_dal = CustomerDAL(session=session)
+item_dal= ItemDAL(session=session) 
+purchase_dal=PurchaseDAL(session=session)
+
+# Handle DDL and seeding
+if os.environ.get('STAGE') == 'dev':
     Base.metadata.drop_all(engine)
     Base.metadata.create_all(engine)
+    seeder = DatabaseSeeder(customer_dal=customer_dal, item_dal=item_dal, purchase_dal=purchase_dal)
+    seeder.run()
 
-seeder = DatabaseSeeder(session=session)
-seeder.run()
 
-purchase_dal=PurchaseDAL(session=session)
-customer_dal=CustomerDAL(session=session)
-
-rest_controller.RestController(app=app, customer_dal=customer_dal)
-
+# Set up Kafka Consumer and Flask Rest Controller
 consumer = KafkaPurchaseConsumer(purchase_dal=purchase_dal, topic="purchases", bootstrap_servers=bootstrap_servers)
 consumer.start()
 
+rest_controller.RestController(app=app, customer_dal=customer_dal)
 
+if __name__ == "__main__":
+    app.run(debug=True)
 
 
 

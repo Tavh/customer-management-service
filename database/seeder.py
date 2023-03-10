@@ -2,14 +2,13 @@ from random import randint
 from database.customer_dal import CustomerDAL
 from database.item_dal import ItemDAL
 from database.purchase_dal import PurchaseDAL
-from sqlalchemy.orm import Session
+
 
 class DatabaseSeeder:
-    def __init__(self, session: Session):
-        self.session = session
-        self.customer_dal = CustomerDAL(session=session)
-        self.item_dal = ItemDAL(session=session)
-        self.purchase_dal = PurchaseDAL(session=session)
+    def __init__(self, customer_dal: CustomerDAL, item_dal: ItemDAL, purchase_dal: PurchaseDAL):
+        self.customer_dal = customer_dal
+        self.item_dal = item_dal
+        self.purchase_dal = purchase_dal
 
     def run(self):
         # Create 50 customers
@@ -36,5 +35,4 @@ class DatabaseSeeder:
                     item_id=item.id
                 )
 
-        self.session.commit()
 

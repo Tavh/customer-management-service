@@ -5,7 +5,4 @@ test:
 	python -m unittest discover -s database -p '*_test.py'
 
 run-dev: 
-	FLASK_RUN_PORT=7000 FLASK_APP=main.py flask run
-
-run-prod: 
-	FLASK_RUN_PORT=7000 FLASK_DEBUG=false FLASK_APP=main.py flask run
+	BOOTSTRAP_SERVERS=localhost:29092 DATABASE_URL=postgresql://postgres:postgres@localhost:5431/customers TOPIC=purchases STAGE=development FLASK_APP=main.py flask run
