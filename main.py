@@ -31,7 +31,7 @@ seeder.run()
 purchase_dal=PurchaseDAL(session=session)
 customer_dal=CustomerDAL(session=session)
 
-rest_controller.RestController(app=app, session=session, customer_dal=customer_dal)
+rest_controller.RestController(app=app, customer_dal=customer_dal)
 
 consumer = KafkaPurchaseConsumer(purchase_dal=purchase_dal, topic="purchases", bootstrap_servers="localhost:9092")
 consumer.start()

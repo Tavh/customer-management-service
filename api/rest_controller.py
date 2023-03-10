@@ -1,10 +1,10 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify
 from sqlalchemy.orm import Session
 from database.customer_dal import CustomerDAL
 
 
 class RestController:
-    def __init__(self, app: Flask, session: Session, customer_dal: CustomerDAL):
+    def __init__(self, app: Flask, customer_dal: CustomerDAL):
         self.app = app
         self.customer_dal = customer_dal
 
