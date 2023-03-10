@@ -17,7 +17,6 @@ To run this application locally:
 make run-local
 ```
 
-
 ## Configuration
 
 Requires the following env variables:
@@ -25,6 +24,13 @@ Requires the following env variables:
 `DATABASE_URL` - connection string to an relational db
 `BOOTSTRAP_SERVERS` = list of kafka broker strings (standard kafka format)
 `TOPIC` = a kafka topic to consume from
+
+## Testing
+
+To run unit tests, simply run the command:
+```
+make test
+```
 
 ## API Endpoints
 
