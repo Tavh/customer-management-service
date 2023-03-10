@@ -5,23 +5,26 @@ An application for managing purchases made by customers.
 ## Getting Started
 
 This module depends on an available PostgreSQL Server and Kafka Broker.
-To deploy them locally, reffer to https://github.com/Tavh/customer-platform
+A docker-compose that deploys the entire system is available at: https://github.com/Tavh/customer-platform
 
-Once these conditions are met, follow these steps to run this application:
+To run this application locally:
+1. Make sure there is a running and available kafka broker
+2. Make sure there is a running and available PostgeSQL server
+3. Navigate to root (/customer-management-service)
+4. Run the following command (If needed, edit this command in Makefile):
+
+```
+make run-local
+```
 
 
 ## Configuration
 
-The Purchase Management Service uses a configuration file to specify the connection details for the PostgreSQL database and
-the kafka bootstrap servers. The configuration file should be named `config.ini` and located in the root directory of the app. Here's an example configuration file:
+Requires the following env variables:
 
-```ini
-[database]
-url = postgresql://username:password@localhost:5432/customers
-
-[kafka]
-bootstrap_servers = localhost:9092
-```
+`DATABASE_URL` - connection string to an relational db
+`BOOTSTRAP_SERVERS` = list of kafka broker strings (standard kafka format)
+`TOPIC` = a kafka topic to consume from
 
 ## API Endpoints
 
