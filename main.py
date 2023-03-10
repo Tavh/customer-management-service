@@ -15,8 +15,9 @@ app = Flask(__name__)
 
 config = ConfigParser()
 config.read('config.ini')
-
 database_url = config['database']['url']
+bootstrap_servers = config['kafka']['bootstrap_servers']
+
 engine = create_engine(database_url)
 Session = sessionmaker(bind=engine)
 session = Session()
@@ -33,7 +34,7 @@ customer_dal=CustomerDAL(session=session)
 
 rest_controller.RestController(app=app, customer_dal=customer_dal)
 
-consumer = KafkaPurchaseConsumer(purchase_dal=purchase_dal, topic="purchases", bootstrap_servers="localhost:9092")
+consumer = KafkaPurchaseConsumer(purchase_dal=purchase_dal, topic="purchases", bootstrap_servers=bootstrap_servers)
 consumer.start()
 
 

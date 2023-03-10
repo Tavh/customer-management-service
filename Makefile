@@ -8,5 +8,6 @@ test:
 
 run-dev:
  	FLASK_APP=main.py flask run
+	
 run-prod:
 	FLASK_DEBUG=false FLASK_APP=main.py flask run
