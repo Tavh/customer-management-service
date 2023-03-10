@@ -3,6 +3,8 @@ from database.purchase_dal import PurchaseDAL
 from threading import Thread
 from util.logger import get_logger
 from kafka import KafkaConsumer
+import threading 
+
 
 class KafkaPurchaseConsumer:
     """
@@ -25,9 +27,11 @@ class KafkaPurchaseConsumer:
             topic,
             bootstrap_servers=bootstrap_servers,
             auto_offset_reset='earliest',
-            enable_auto_commit=True,
+            enable_auto_commit=False,
+            group_id="purchase-consumers",
             value_deserializer=lambda x: loads(x.decode('utf-8'))
         )
+        self.start()
 
     def consume(self):
         """
@@ -35,12 +39,13 @@ class KafkaPurchaseConsumer:
         """
         for message in self.consumer:
             message = message.value
-            self.logger.debug(f"Consumed message from '{self.consumer.topics}': {message}")
+            self.logger.debug(f"Consumed message from '{self.consumer.topics}': {message} on thread: {threading.get_ident()}")
             if message['event_type'] == 'purchase':
                 customer_id = message['customer_id']
                 item_id = message['item_id']
                 purchase = self.purchase_dal.create_purchase(customer_id=customer_id, item_id=item_id)
                 self.logger.info(f"Created purchase: {purchase.to_json()}")
+                self.consumer.commit()
 
     def start(self):
         """
