@@ -3,7 +3,6 @@ FROM python:3.9-slim-buster
 WORKDIR /app
 
 # Copy the requirements file and install dependencies
-# Copy the requirements file and install dependencies
 COPY requirements.txt requirements.txt
 RUN python3 -m venv venv && \
     pip3 install --upgrade pip && \
@@ -15,6 +14,7 @@ COPY . .
 ENV DATABASE_URL ${DATABASE_URL}
 ENV BOOTSTRAP_SERVERS ${DATABASE_URL}
 ENV TOPIC ${TOPIC}
+ENV STAGE ${STAGE}
 
 # Expose port 5000 for the Flask app
 EXPOSE 5000
