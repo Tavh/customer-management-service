@@ -24,6 +24,7 @@ class RestController:
         Registers the REST API endpoints for this controller.
         """
         self.app.route('/customers/<customer_id>/purchases', methods=['GET'])(self.get_customer_purchases)
+        self.app.route('/customers/<int:customer_id>/purchases', methods=['GET'])(self.get_customer_purchases)
 
     def get_customer_purchases(self, customer_id):
         """
